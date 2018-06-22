@@ -10,9 +10,8 @@
 #include <cstdio>
 #include <cmath>
 
+#include "GridayTypes.hpp"
 #include "Random.hpp"
-
-const GReal EnergyGrid::PI = 3.141592;
 
 EnergyGrid::EnergyGrid()
     {
@@ -28,6 +27,7 @@ void
 EnergyGrid::read(std::string filename)
     {
     using namespace std;
+    auto PI = constant::PI;
 
     auto pos = filename.rfind(".grid");
 
@@ -114,6 +114,8 @@ void
 EnergyGrid::print()
     {
     using namespace std;
+
+    auto PI = constant::PI;
 
     cout << setw(80) << setfill('=') << "" << setfill(' ') << endl;
 

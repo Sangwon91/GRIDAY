@@ -7,6 +7,8 @@
 #include <fstream>
 #include <iomanip>
 
+#include "GridayTypes.hpp"
+
 GridMaker::GridMaker(const AtomTypeMap& typeMap,
                      const Framework& framework,
                      const ForceField& forceField) :
@@ -135,7 +137,7 @@ GridMaker::make(std::string guestName, const GReal spacing,
     if (not gridFile.good())
         THROW_EXCEPT(".gird file open fails at saving");
 
-    const GReal PI = 3.141592;
+    const GReal PI = constant::PI;
     Vector angles = mFramework.getCellAngles() / PI * 180.0;
     gridFile << setw(20) << "CELL_PARAMETERS" <<
                 setw(10) << unitcellLengths[0] <<

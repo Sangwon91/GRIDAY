@@ -67,8 +67,6 @@ public:
 private:
     void makeCellInformation();
 private:
-    static const GReal PI;
-
     std::vector<GReal> mGrid;
 
     Vector mCellLengths;

@@ -7,6 +7,8 @@
 #include <sstream>
 #include <iomanip>
 
+#include "GridayTypes.hpp"
+
 Framework::Framework(AtomTypeMap& typeMap) :
     mAtomTypeMap {typeMap}
     {
@@ -22,7 +24,7 @@ Framework::read(std::string filename)
     // Read cssr file
     using namespace std;
 
-    const GReal PI = 3.141592;
+    const GReal PI = constant::PI;
 
     FILE* fp = fopen(filename.c_str(), "r");
     if (fp == nullptr)
@@ -96,7 +98,7 @@ Framework::print()
     {
     using namespace std;
 
-    const GReal PI = 3.141592;
+    const GReal PI = constant::PI;
 
     cout << setw(80) << setfill('=') << "" << setfill(' ') << endl;
 
