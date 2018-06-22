@@ -572,6 +572,108 @@ EnergyGrid::interpolate(const Vector& r)
     return ene;
     }
 
+GReal
+EnergyGrid::interpolate3d(GReal x, GReal y, GReal z)
+    {
+    return this->interpolate3d(Vector {x, y, z});
+    }
+
+inline
+GReal
+cubicInterpolation3d(const std::vector<GReal>& x,
+                     const std::vector<GReal>& y,
+                     const std::vector<GReal>& z,
+                     const GReal& x0)
+    {
+    GReal y0 {0.0};
+
+    for (int k = 0; k < 4; ++k)
+        {
+        GReal term {y[k]};
+
+        for (int j = 0; j < 4; ++j)
+            {
+            if (k ==j)
+                continue;
+
+            term *= (x0 - x[j]) / (x[k] - x[j]);
+            }
+
+        y0 += term;
+        }
+
+    return y0;
+    }
+
+GReal
+EnergyGrid::interpolate3d(const Vector& r)
+    {
+    using namespace std;
+
+    // Apply PBC
+    Vector s = mInvCell * r;
+
+    // Make s[i] to be in [0,1]
+    for (auto& si : s)
+        si = si - floor(si);
+
+    vector<GReal> maxes {static_cast<GReal>(mMaxNx),
+                         static_cast<GReal>(mMaxNy),
+                         static_cast<GReal>(mMaxNz)};
+
+    // Position at index space
+    Vector rIndex = s;
+    for (int i = 0; i < 3; ++i)
+        rIndex[i] *= maxes[i];
+
+    // Lower index
+    vector<GIndex> idx0 (3);
+    for (int i = 0; i < 3; ++i)
+        idx0[i] = floor(rIndex[i]);
+
+    // Upper index
+    vector<GIndex> idx1 (3);
+    for (int i = 0; i < 3; ++i)
+        idx1[i] = idx0[i] + 1;
+
+    if (idx1[0] == mMaxNx)
+        idx1[0] = 0;
+    if (idx1[1] == mMaxNy)
+        idx1[1] = 0;
+    if (idx1[2] == mMaxNz)
+        idx1[2] = 0;
+
+    // x, y, z in [0,1]
+    GReal x = rIndex[0] - static_cast<GReal>(idx0[0]);
+    GReal y = rIndex[1] - static_cast<GReal>(idx0[1]);
+    GReal z = rIndex[2] - static_cast<GReal>(idx0[2]);
+
+    GReal one_x = 1.0 - x;
+    GReal one_y = 1.0 - y;
+    GReal one_z = 1.0 - z;
+
+    GReal v000 = (*this)(idx0[0], idx0[1], idx0[2]);
+    GReal v100 = (*this)(idx1[0], idx0[1], idx0[2]);
+    GReal v010 = (*this)(idx0[0], idx1[1], idx0[2]);
+    GReal v001 = (*this)(idx0[0], idx0[1], idx1[2]);
+    GReal v101 = (*this)(idx1[0], idx0[1], idx1[2]);
+    GReal v011 = (*this)(idx0[0], idx1[1], idx1[2]);
+    GReal v110 = (*this)(idx1[0], idx1[1], idx0[2]);
+    GReal v111 = (*this)(idx1[0], idx1[1], idx1[2]);
+
+    GReal ene =
+         v000 * one_x * one_y * one_z +
+         v100 *     x * one_y * one_z +
+         v010 * one_x *     y * one_z +
+         v001 * one_x * one_y *     z +
+         v101 *     x * one_y *     z +
+         v011 * one_x *     y *     z +
+         v110 *     x *     y * one_z +
+         v111 *     x *     y *     z;
+
+    return ene;
+    }
+
 Vector
 EnergyGrid::getCellLengths()
     {

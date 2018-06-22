@@ -34,6 +34,9 @@ public:
     GReal interpolate(GReal x, GReal y, GReal z);
     GReal interpolate(const Vector& r);
 
+    GReal interpolate3d(const Vector& r);
+    GReal interpolate3d(GReal x, GReal y, GReal z);
+
     Vector getCellLengths();
     Vector getCellAngles();
     Vector getCellHeights();
