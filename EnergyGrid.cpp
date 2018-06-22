@@ -27,7 +27,7 @@ void
 EnergyGrid::read(std::string filename)
     {
     using namespace std;
-    auto PI = constant::PI;
+    const auto PI = constant::PI;
 
     auto pos = filename.rfind(".grid");
 
@@ -115,7 +115,7 @@ EnergyGrid::print()
     {
     using namespace std;
 
-    auto PI = constant::PI;
+    const auto PI = constant::PI;
 
     cout << setw(80) << setfill('=') << "" << setfill(' ') << endl;
 
