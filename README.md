@@ -36,7 +36,7 @@ try {
 
     GReal spacing = 0.02;
     string atomTypeName {"./FF/Zeolite_Type.def"};
-    string forceFieldName {"./FF/Zeolite_FF.def"};;
+    string forceFieldName {"./FF/Zeolite_FF.def"};
     string cssrName {"ACO.cssr"};
     string outputStem {"ACO"};
 
