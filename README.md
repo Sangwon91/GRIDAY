@@ -90,7 +90,7 @@ Run the example.
 $ ./example.x
 ```
 
-## How to Make CSSR file.
+## How to Make CSSR file
 
 [ZEO++](http://www.zeoplusplus.org/examples.html) can convert `CIF` file to `CSSR` file.
 
